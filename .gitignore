@@ -1,0 +1,17 @@
+node_modules/
+dist/
+build/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+coverage/
+.vite/
+
+# personal editor/agent settings, not shared config
+.claude/settings.local.json
+
+# my own working notes -- kept local, not part of the repo
+NOTES.md
+docs/

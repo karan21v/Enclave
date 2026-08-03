@@ -1,0 +1,24 @@
+{
+  "name": "enclave",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@enclave/server & npm run dev --workspace=@enclave/web",
+    "dev:server": "npm run dev --workspace=@enclave/server",
+    "dev:web": "npm run dev --workspace=@enclave/web",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:migrate": "npm run migrate --workspace=@enclave/server",
+    "db:studio": "npm run studio --workspace=@enclave/server"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  },
+  "overrides": {
+    "dompurify": "3.4.12"
+  }
+}
