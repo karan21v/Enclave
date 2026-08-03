@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Room {
+  // the part of the URL the server actually sees. the key lives in the
+  // fragment and never gets here.
+  id           String   @id
+  createdAt    DateTime @default(now())
+  lastActiveAt DateTime @default(now())
+
+  events Event[]
+
+  @@index([lastActiveAt]) // for reaping idle rooms
+}
+
+model Event {
+  id BigInt @id @default(autoincrement())
+
+  roomId String
+  room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  // per-room order. has to be plaintext -- the server can't read the payload
+  // to work out ordering itself.
+  seq Int
+
+  // which ratchet key encrypted this. also has to be plaintext, the client
+  // needs to know which key to try.
+  epoch Int @default(0)
+
+  // not secret, but must never repeat under the same key. nonce reuse in GCM
+  // leaks the keystream.
+  nonce Bytes
+
+  // encrypted Yjs update. meaningless bytes to the server.
+  ciphertext Bytes
+
+  // sha256(prevHash || seq || epoch || nonce || ciphertext)
+  // chains events together so any edit breaks everything downstream
+  hash Bytes
+
+  createdAt DateTime @default(now())
+
+  // every read is "events in this room after seq N". a UNIQUE in Postgres is
+  // backed by an index, so this covers the query too -- a separate @@index
+  // would just be a second copy of the same B-tree.
+  @@unique([roomId, seq])
+}
