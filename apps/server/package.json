@@ -1,0 +1,27 @@
+{
+  "name": "@enclave/server",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "start": "prisma migrate deploy && tsx src/index.ts",
+    "migrate": "prisma migrate dev",
+    "generate": "prisma generate",
+    "studio": "prisma studio"
+  },
+  "dependencies": {
+    "@enclave/merkle": "*",
+    "@fastify/static": "^10.1.2",
+    "@prisma/client": "^6.1.0",
+    "fastify": "^5.2.0",
+    "prisma": "^6.1.0",
+    "tsx": "^4.19.2",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/ws": "^8.5.13",
+    "typescript": "^5.7.2"
+  }
+}
