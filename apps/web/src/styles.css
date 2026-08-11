@@ -1,0 +1,120 @@
+:root {
+  --bg: #11131a;
+  --fg: #e6e8ee;
+  --muted: #8b93a7;
+  --accent: #6ea8fe;
+  --warn: #d9a441;
+  --error: #e06c75;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.centered {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: 2.25rem;
+  letter-spacing: -0.02em;
+}
+
+.muted {
+  color: var(--muted);
+  margin: 0 0 1rem;
+}
+
+.error {
+  color: var(--error);
+}
+
+button {
+  background: var(--accent);
+  color: #0b1020;
+  border: 0;
+  border-radius: 6px;
+  padding: 0.6rem 1.1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.bar {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 0.9rem;
+  border-bottom: 1px solid #232735;
+}
+
+.logo {
+  font-weight: 700;
+}
+
+.roomid {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.badge {
+  margin-left: auto;
+  font-size: 0.72rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+}
+
+.badge-warn {
+  color: var(--warn);
+}
+
+.badge-ok {
+  color: #56d364;
+}
+
+.badge-error {
+  color: var(--error);
+}
+
+.small {
+  font-size: 0.78rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.dot-open {
+  background: #56d364;
+}
+
+.dot-connecting {
+  background: var(--warn);
+}
+
+.dot-closed {
+  background: var(--error);
+}
