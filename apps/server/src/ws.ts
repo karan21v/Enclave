@@ -2,6 +2,7 @@ import type { Server } from "node:http";
 import { WebSocketServer, type WebSocket } from "ws";
 import { prisma } from "./db.js";
 import { appendEvent, replayEvents, RoomFullError, toBase64 } from "./events.js";
+import { touchRoom } from "./reaper.js";
 import { broadcast, join, leave, memberCount } from "./rooms.js";
 
 const MAX_PAYLOAD = 1024 * 1024; // a 100MB "update" is an attack, not an edit
@@ -78,6 +79,7 @@ export function attachWebSockets(server: Server) {
     });
 
     join(roomId, ws);
+    touchRoom(roomId);
 
     // client tells us the last seq it has, we send everything after.
     // sending too much is fine -- Yjs updates are idempotent, so re-applying
@@ -124,6 +126,7 @@ export function attachWebSockets(server: Server) {
           : new Uint8Array(0);
 
         const stored = await appendEvent(roomId, payload, msg.epoch ?? 0, nonce);
+        touchRoom(roomId); // throttled internally, not a write per keystroke
 
         broadcast(
           roomId,

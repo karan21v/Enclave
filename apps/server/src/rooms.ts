@@ -1,5 +1,6 @@
 import type { WebSocket } from "ws";
 import { forgetRoomCache } from "./events.js";
+import { forgetTouch } from "./reaper.js";
 
 // Presence lives in memory on purpose -- it's only true while this process is
 // up, and writing it to Postgres would mean a write per connect/disconnect plus
@@ -26,6 +27,7 @@ export function leave(roomId: string, ws: WebSocket) {
   if (members.size === 0) {
     rooms.delete(roomId);
     forgetRoomCache(roomId);
+    forgetTouch(roomId);
   }
 }
 

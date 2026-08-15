@@ -4,6 +4,7 @@ import fastifyStatic from "@fastify/static";
 import Fastify from "fastify";
 import { prisma } from "./db.js";
 import { newRoomId } from "./ids.js";
+import { startReaper } from "./reaper.js";
 import { exportTranscript, proveEvent } from "./transcript.js";
 import { attachWebSockets } from "./ws.js";
 
@@ -84,6 +85,7 @@ async function main() {
 
   // has to be after listen(), app.server isn't bound until then
   attachWebSockets(app.server);
+  startReaper(app.log);
   app.log.info("websocket relay up");
 }
 

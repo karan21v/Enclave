@@ -147,7 +147,9 @@ npm run build --workspace=@enclave/web   # client -> apps/web/dist
 npm run start --workspace=@enclave/server # migrates, then serves everything
 ```
 
-Set `DATABASE_URL`. Optionally `MAX_EVENTS_PER_ROOM` (default 50,000).
+Set `DATABASE_URL`. Optionally `MAX_EVENTS_PER_ROOM` (default 50,000) and
+`ROOM_RETENTION_DAYS` (default 30) — rooms idle longer than that are deleted
+hourly, and their events go with them.
 
 > **This cannot be scaled past one instance.** Presence lives in memory and
 > appends are serialised in-process — a second instance would fork the hash
