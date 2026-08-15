@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "typecheck": "tsc --noEmit",
+    "postinstall": "prisma generate",
     "start": "prisma migrate deploy && tsx src/index.ts",
     "migrate": "prisma migrate dev",
     "generate": "prisma generate",

@@ -1,0 +1,32 @@
+# One service, one origin. Fastify serves the built client, the API, and the
+# WebSocket relay together -- see apps/server/src/index.ts. Splitting the client
+# onto a separate host would mean CORS and a cross-origin WebSocket, and the
+# client is written to assume same-origin (sync.ts uses location.host).
+#
+# The database is not declared here on purpose -- Render's free Postgres
+# expires. Create it separately and set DATABASE_URL in the dashboard.
+services:
+  - type: web
+    name: enclave
+    runtime: node
+    plan: free
+    region: oregon
+
+    buildCommand: npm ci && npm run build --workspace=@enclave/web && npm run generate --workspace=@enclave/server
+    startCommand: npm run start --workspace=@enclave/server
+
+    healthCheckPath: /health
+
+    envVars:
+      - key: DATABASE_URL
+        sync: false # set in the Render dashboard, never in git
+      - key: NODE_VERSION
+        value: "22"
+
+    # IMPORTANT, and the reason this cannot scale up:
+    # rooms.ts keeps presence in memory and events.ts serialises appends
+    # in-process. Two instances would not see each other's members, and both
+    # would race the same seq -- forking the hash chain the transcript verifies.
+    # Presence needs external pub/sub and appends need a Postgres advisory lock
+    # before this can go above 1.
+    numInstances: 1
